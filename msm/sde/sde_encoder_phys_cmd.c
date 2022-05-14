@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2015-2020, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #define pr_fmt(fmt)	"[drm:%s:%d] " fmt, __func__, __LINE__
@@ -238,6 +239,8 @@ static void sde_encoder_phys_cmd_te_rd_ptr_irq(void *arg, int irq_idx)
 
 	if (!phys_enc || !phys_enc->hw_pp || !phys_enc->hw_intf)
 		return;
+
+	sde_encoder_save_vsync_info(phys_enc);
 
 	SDE_ATRACE_BEGIN("rd_ptr_irq");
 	cmd_enc = to_sde_encoder_phys_cmd(phys_enc);

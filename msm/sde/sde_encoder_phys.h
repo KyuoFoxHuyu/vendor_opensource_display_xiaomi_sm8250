@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
  * Copyright (c) 2015-2019, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #ifndef __SDE_ENCODER_PHYS_H__
@@ -575,6 +576,8 @@ int sde_encoder_helper_wait_event_timeout(
  */
 void sde_encoder_helper_get_jitter_bounds_ns(struct drm_encoder *encoder,
 			u64 *l_bound, u64 *u_bound);
+
+void sde_encoder_save_vsync_info(struct sde_encoder_phys *phys_enc);
 
 /**
  * sde_encoder_helper_switch_vsync - switch vsync source to WD or default
