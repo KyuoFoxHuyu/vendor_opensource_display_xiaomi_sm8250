@@ -1,7 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
- * Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
+ * Copyright (c) 2016-2020, The Linux Foundation. All rights reserved.
  */
 
 #ifndef _SDE_CONNECTOR_H_
@@ -339,6 +338,14 @@ struct sde_connector_ops {
 	 */
 	int (*prepare_commit)(void *display,
 		struct msm_display_conn_params *params);
+
+	/**
+	 * get_qsync_min_fps - Get qsync min fps from qsync-min-fps-list
+	 * @display: Pointer to private display structure
+	 * @mode_fps: Fps value in dfps list
+	 * Returns: Qsync min fps value on success
+	 */
+	int (*get_qsync_min_fps)(void *display, u32 mode_fps);
 };
 
 /**
@@ -387,8 +394,8 @@ enum mi_dimlayer_type {
 	MI_DIMLAYER_FOD_HBM_OVERLAY = 0x1,
 	MI_DIMLAYER_FOD_ICON = 0x2,
 	MI_DIMLAYER_AOD = 0x4,
-	MI_FOD_UNLOCK_SUCCESS = 0x8,
-	MI_LAYER_FOD_ANIM = 0x10,
+	MI_LAYER_FOD_ANIM = 0x8,
+	MI_FOD_UNLOCK_SUCCESS = 0x10,
 	MI_DIMLAYER_MAX,
 };
 

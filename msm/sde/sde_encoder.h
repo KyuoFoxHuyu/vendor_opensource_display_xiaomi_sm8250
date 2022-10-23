@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2020, The Linux Foundation. All rights reserved.
  * Copyright (C) 2013 Red Hat
  * Author: Rob Clark <robdclark@gmail.com>
  *
@@ -313,6 +313,15 @@ void sde_encoder_recovery_events_handler(struct drm_encoder *encoder,
  */
 bool sde_encoder_in_clone_mode(struct drm_encoder *enc);
 
+/*
+ * sde_encoder_is_cwb_disabling - check if cwb encoder disable is pending
+ * @drm_enc:    Pointer to drm encoder structure
+ * @drm_crtc:    Pointer to drm crtc structure
+ * @Return: true if cwb encoder disable is pending
+ */
+bool sde_encoder_is_cwb_disabling(struct drm_encoder *drm_enc,
+	struct drm_crtc *drm_crtc);
+
 /**
  * sde_encoder_is_primary_display - checks if underlying display is primary
  *     display or not.
@@ -362,5 +371,40 @@ void sde_encoder_uidle_enable(struct drm_encoder *drm_enc, bool enable);
  * @Return:     non zero value if wait timeout occurred
  */
 int sde_encoder_vid_wait_for_active(struct drm_encoder *enc);
+
+/**
+ * sde_encoder_virt_reset - delay encoder virt reset
+ * @drm_enc:	Pointer to drm encoder structure
+ */
+void sde_encoder_virt_reset(struct drm_encoder *drm_enc);
+
+/**
+ * sde_encoder_get_kms - retrieve the kms from encoder
+ * @drm_enc:    Pointer to drm encoder structure
+ */
+static inline struct sde_kms *sde_encoder_get_kms(struct drm_encoder *drm_enc)
+{
+	struct msm_drm_private *priv;
+
+	if (!drm_enc || !drm_enc->dev) {
+		SDE_ERROR("invalid encoder\n");
+		return NULL;
+	}
+	priv = drm_enc->dev->dev_private;
+	if (!priv || !priv->kms) {
+		SDE_ERROR("invalid kms\n");
+		return NULL;
+	}
+
+	return to_sde_kms(priv->kms);
+}
+
+bool get_sde_encoder_virt_prepare_kickoff(struct drm_connector *connector);
+
+bool get_sde_encoder_virt_ready_kickoff(struct drm_connector *connector);
+
+void set_sde_encoder_virt_prepare_kickoff(struct drm_connector *connector,bool enable);
+
+void set_sde_encoder_virt_ready_kickoff(struct drm_connector *connector,bool enable);
 
 #endif /* __SDE_ENCODER_H__ */

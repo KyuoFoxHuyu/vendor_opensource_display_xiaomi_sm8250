@@ -1,7 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
  * Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
  */
 
 #ifndef _DSI_CTRL_HW_H_
@@ -858,7 +857,15 @@ struct dsi_ctrl_hw_ops {
 	 */
 	void (*reset_trig_ctrl)(struct dsi_ctrl_hw *ctrl,
 			struct dsi_host_common_cfg *cfg);
-
+ 
+	/**
+	 * hw.ops.map_mdp_regs() - maps MDP interface line count registers.
+	 * @pdev:»       Pointer to platform device.
+	 * @ctrl:»       Pointer to the controller host hardware.
+	 */
+	int (*map_mdp_regs)(struct platform_device *pdev,
+			struct dsi_ctrl_hw *ctrl);
+ 
 	/**
 	 * hw.ops.log_line_count() - reads the MDP interface line count
 	 *							registers.
@@ -876,6 +883,13 @@ struct dsi_ctrl_hw_ops {
  * @mmss_misc_length:       Length of mmss_misc register map.
  * @disp_cc_base:           Base address of disp_cc register map.
  * @disp_cc_length:         Length of disp_cc register map.
+ * @te_rd_ptr_reg:          Address of MDP_TEAR_INTF_TEAR_LINE_COUNT. This
+ *                          register is used for testing and validating the RD
+ *                          ptr value when a CMD is triggered and it succeeds.
+ * @line_count_reg:         Address of MDP_TEAR_INTF_LINE_COUNT. This
+ *                          register is used for testing and validating the
+ *                          line count value when a CMD is triggered and it
+ *                          succeeds.
  * @mdp_intf_base:	Base address of mdp_intf register map. Addresses of
  *			MDP_TEAR_INTF_TEAR_LINE_COUNT, MDP_TEAR_INTF_LINE_COUNT
  *			are mapped using the base address to test and validate
@@ -900,6 +914,8 @@ struct dsi_ctrl_hw {
 	void __iomem *mmss_misc_base;
 	u32 mmss_misc_length;
 	void __iomem *disp_cc_base;
+	void __iomem *te_rd_ptr_reg;
+	void __iomem *line_count_reg;
 	u32 disp_cc_length;
 	void __iomem *mdp_intf_base;
 	u32 index;

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) 2015-2021, The Linux Foundation. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
+ * Copyright (c) 2015-2020, The Linux Foundation. All rights reserved.
  */
 
 #include <linux/errno.h>
@@ -85,6 +84,7 @@ static void dsi_catalog_cmn_init(struct dsi_ctrl_hw *ctrl,
 		ctrl->ops.configure_cmddma_window = NULL;
 		ctrl->ops.reset_trig_ctrl = NULL;
 		ctrl->ops.log_line_count = NULL;
+		ctrl->ops.map_mdp_regs = NULL;
 		break;
 	case DSI_CTRL_VERSION_2_0:
 		ctrl->ops.setup_lane_map = dsi_ctrl_hw_20_setup_lane_map;
@@ -102,6 +102,7 @@ static void dsi_catalog_cmn_init(struct dsi_ctrl_hw *ctrl,
 		ctrl->ops.config_clk_gating = NULL;
 		ctrl->ops.configure_cmddma_window = NULL;
 		ctrl->ops.reset_trig_ctrl = NULL;
+		ctrl->ops.map_mdp_regs = NULL;
 		ctrl->ops.log_line_count = NULL;
 		break;
 	case DSI_CTRL_VERSION_2_2:
@@ -127,6 +128,7 @@ static void dsi_catalog_cmn_init(struct dsi_ctrl_hw *ctrl,
 			dsi_ctrl_hw_22_configure_cmddma_window;
 		ctrl->ops.reset_trig_ctrl =
 			dsi_ctrl_hw_22_reset_trigger_controls;
+		ctrl->ops.map_mdp_regs = dsi_ctrl_hw_22_map_mdp_regs;
 		ctrl->ops.log_line_count = dsi_ctrl_hw_22_log_line_count;
 		break;
 	default:

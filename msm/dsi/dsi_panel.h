@@ -1,7 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
- * Copyright (c) 2016-2020, The Linux Foundation. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
+ * Copyright (c) 2016-2021, The Linux Foundation. All rights reserved.
  */
 
 #ifndef _DSI_PANEL_H_
@@ -22,6 +21,7 @@
 #include "dsi_parser.h"
 #include "msm_drv.h"
 #include "dsi_panel_mi.h"
+
 
 #define MAX_BL_LEVEL 4096
 #define MAX_BL_SCALE_LEVEL 1024
@@ -87,6 +87,13 @@ struct dsi_dfps_capabilities {
 	bool dfps_support;
 };
 
+struct dsi_qsync_capabilities {
+	/* qsync disabled if qsync_min_fps = 0 */
+	u32 qsync_min_fps;
+	u32 *qsync_min_fps_list;
+	int qsync_min_fps_list_len;
+};
+
 struct dsi_dyn_clk_caps {
 	bool dyn_clk_support;
 	u32 *bit_clk_list;
@@ -119,6 +126,7 @@ struct dsi_backlight_config {
 	u32 bl_scale;
 	u32 bl_scale_sv;
 	bool bl_inverted_dbv;
+	u32 bl_dcs_subtype;
 
 	int en_gpio;
 	/* PWM params */
@@ -141,8 +149,10 @@ struct dsi_panel_reset_config {
 	u32 count;
 
 	int reset_gpio;
+	int tp_reset_gpio;
 	int disp_en_gpio;
 	int lcd_mode_sel_gpio;
+	u32 reset_powerdown_delay;
 	u32 mode_sel_state;
 };
 
@@ -196,6 +206,7 @@ struct dsi_panel {
 
 	struct dsi_regulator_info power_info;
 	struct dsi_backlight_config bl_config;
+	struct dsi_backlight_config bl_slaver_config;
 	struct dsi_panel_reset_config reset_config;
 	struct dsi_pinctrl_info pinctrl;
 	struct drm_panel_hdr_properties hdr_props;
@@ -212,7 +223,7 @@ struct dsi_panel {
 
 	bool panel_initialized;
 	bool te_using_watchdog_timer;
-	u32 qsync_min_fps;
+	struct dsi_qsync_capabilities qsync_caps;
 
 	char dsc_pps_cmd[DSI_CMD_PPS_SIZE];
 	enum dsi_dms_mode dms_mode;
@@ -220,6 +231,7 @@ struct dsi_panel {
 	bool sync_broadcast_en;
 
 	struct dsi_panel_mi_cfg mi_cfg;
+
 	int panel_test_gpio;
 	int power_mode;
 	enum dsi_panel_physical_type panel_type;
